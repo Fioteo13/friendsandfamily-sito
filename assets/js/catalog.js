@@ -1,4 +1,4 @@
-// Catalogue: choose a world (Optical / Sun), filter by collection, editorial grid, detail sheet, "Better 1 or 2?" test
+// Catalogue: choose a world (Optical / Sun), filter by collection, editorial grid, detail sheet
 (function () {
   var root = document.querySelector('.catalog');
   if (!root || !window.FF_MODELS) return;
@@ -112,78 +112,16 @@
   });
   $('detail').addEventListener('click', function (e) { if (e.target === $('detail')) closeDetail(); });
   document.addEventListener('keydown', function (e) {
-    if (!$('game').hidden) { if (e.key === 'Escape') closeGame(); return; }
     if ($('detail').hidden) return;
     if (e.key === 'Escape') closeDetail();
     if (e.key === 'ArrowRight') $('next').click();
     if (e.key === 'ArrowLeft') $('prev').click();
   });
 
-  // ---------- Better 1 or 2? ----------
-  var ROUNDS = 6, g = null, gameFocus = null;
-  function ticks() {
-    var s = '';
-    for (var i = 0; i < 72; i++) {
-      var a = i * 5 * Math.PI / 180, L = i % 9 === 0 ? 12 : 6.6, r1 = 198;
-      s += '<line x1="' + (200 + Math.cos(a) * r1).toFixed(1) + '" y1="' + (200 + Math.sin(a) * r1).toFixed(1) + '" x2="' + (200 + Math.cos(a) * (r1 - L)).toFixed(1) + '" y2="' + (200 + Math.sin(a) * (r1 - L)).toFixed(1) + '"/>';
-    }
-    return '<svg class="ticks" viewBox="0 0 400 400" aria-hidden="true">' + s + '</svg>';
-  }
-  function lens(m, d, label) {
-    var c = m.colors[0];
-    return '<span class="lensc" style="--d:' + d + ';--r:calc(' + d + ' * .055)">' + ticks() + '<span class="glass"><img src="' + IMG + (c.front || c.side) + '" alt="' + esc(T.eyewear + ' ' + m.name) + '"></span>' + (label ? '<span class="lbl">' + label + '</span>' : '') + '</span>';
-  }
-  var byId = {}; ALL.forEach(function (m) { byId[m.id] = m; });
-  function drawGame() {
-    $('game-round').textContent = g.done ? T.yours : (T.round + ' ' + g.round + ' ' + T.of + ' ' + ROUNDS);
-    $('game-title').textContent = g.done ? '' : T.game;
-    $('game-title').hidden = !!g.done;
-    var body = $('game-body');
-    if (!g.done) {
-      var d = 'min(360px, 40vw)';
-      body.innerHTML = '<div class="pair">' +
-        '<button type="button" class="pick" data-pick="a">' + lens(byId[g.a], d, '1') + '<span class="pn">' + esc(byId[g.a].name) + '</span></button>' +
-        '<button type="button" class="pick" data-pick="b">' + lens(byId[g.b], d, '2') + '<span class="pn">' + esc(byId[g.b].name) + '</span></button></div>';
-    } else {
-      var w = byId[g.done];
-      body.innerHTML = lens(w, 'min(380px, 70vw)', '') + '<p class="winner">' + esc(w.name) + '</p><div class="row"><button type="button" class="solid" data-act="open">' + T.openCard + ' →</button><button type="button" data-act="again">' + T.again + '</button></div>';
-    }
-    var first = body.querySelector('button'); if (first) first.focus();
-  }
-  function startGame() {
-    var ids = ALL.map(function (m) { return m.id; }).sort(function () { return Math.random() - 0.5; });
-    g = { pool: ids, a: ids[0], b: ids[1], next: 2, round: 1, done: null };
-    gameFocus = document.activeElement;
-    $('game').hidden = false; document.body.style.overflow = 'hidden';
-    drawGame();
-  }
-  function closeGame() {
-    $('game').hidden = true; document.body.style.overflow = '';
-    if (gameFocus) gameFocus.focus();
-  }
-  $('test').addEventListener('click', startGame);
-  $('game-close').addEventListener('click', closeGame);
-  $('game-body').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    var p = b.getAttribute('data-pick'), act = b.getAttribute('data-act');
-    if (p) {
-      var win = p === 'a' ? g.a : g.b;
-      if (g.round >= ROUNDS) g.done = win;
-      else { g.a = win; g.b = g.pool[g.next]; g.next++; g.round++; }
-      drawGame();
-    } else if (act === 'again') startGame();
-    else if (act === 'open') {
-      var m = byId[g.done], hasV = m.colors.some(function (c) { return !c.lens; });
-      st.mode = hasV ? 'vista' : 'sole'; st.coll = 'all';
-      $('game').hidden = true; renderGrid(); openDetail(m.id);
-    }
-  });
-
-  // deep links: ?c=friends|family  ·  ?m=vista|sole  ·  #test
+  // deep links: ?c=friends|family  ·  ?m=vista|sole
   var q = new URLSearchParams(location.search);
   if (q.get('c') === 'friends' || q.get('c') === 'family') st.coll = q.get('c');
   if (q.get('m') === 'sole' || q.get('m') === 'vista') st.mode = q.get('m');
   renderGrid();
   if (q.get('c') || q.get('m')) setTimeout(function () { $('cat-bar').scrollIntoView({ block: 'start' }); }, 60);
-  if (location.hash === '#test') setTimeout(startGame, 300);
 })();

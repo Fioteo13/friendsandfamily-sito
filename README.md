@@ -17,7 +17,7 @@ Il sito si adatta da solo a computer, tablet e telefono.
 ```
 assets/css/style.css     stile di tutto il sito
 assets/js/site.js        menu su mobile
-assets/js/catalog.js     catalogo: Vista/Sole, filtri, colori, gioco "Meglio 1 o 2?"
+assets/js/catalog.js     catalogo: Vista/Sole, filtri, colori, scheda modello
 assets/js/gallery.js     gallery a schermo intero
 assets/img/frames/       foto occhiali  (modello-colore-lato/front.jpg)
 assets/img/gallery/      foto della campagna

@@ -167,6 +167,8 @@
       root.scrollIntoView({ behavior: 'smooth' });
     }
   });
+  var qc = new URLSearchParams(location.search).get('c');
+  if (qc === 'friends' || qc === 'family') st.coll = qc;
   if (location.hash === '#test') setTimeout(startGame, 300);
 
   render(false);

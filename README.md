@@ -28,7 +28,7 @@ I dati dei modelli (nomi, calibri, colori, foto) sono in fondo a `catalogo.html`
 ## Da completare
 
 - Calibri di Axel, Arrow, Big Theo e Bond (ora `[calibro]`)
-- "Dove trovarci" e P.IVA nel footer
+- "Dove trovarci" nel footer
 
 ## Pubblicare
 

@@ -23,23 +23,37 @@
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu"><span></span><span></span></button></div>
 </header>
 <main id="main" class="catalog" data-lang="en">
-<div class="wrap cat-head">
-<div><span class="mono sub">Collection Friends &amp; Family</span><h1 class="h-cat">Catalogue</h1></div>
-<div class="cat-mode"><div class="switch" role="group" aria-label="Optical or sun"><span class="knob" aria-hidden="true"></span><button type="button" data-mode="vista" aria-pressed="true">Optical</button><button type="button" data-mode="sole" aria-pressed="false">Sun</button></div><span class="mono sub" id="mode-hint"></span></div>
+<section class="worlds" aria-label="Choose your world">
+<button type="button" class="world w-vista" data-mode="vista" aria-pressed="true">
+<span class="w-meta mono"><span>01</span><span class="w-count" data-count="vista"></span></span>
+<img src="../assets/img/lines/bigtheo-drawing.png" alt="" class="w-img">
+<span class="w-name">Optical</span><span class="w-sub mono">Optical frames</span>
+</button>
+<button type="button" class="world w-sole" data-mode="sole" aria-pressed="false">
+<span class="w-meta mono"><span>02</span><span class="w-count" data-count="sole"></span></span>
+<img src="../assets/img/lines/zero-drawing.png" alt="" class="w-img">
+<span class="w-name">Sun</span><span class="w-sub mono">Sunglasses</span>
+</button>
+</section>
+<div class="cat-bar wrap" id="cat-bar">
+<div class="cat-bar-l"><h1 class="h-cat">Catalogue <span id="mode-label"></span></h1><span class="mono sub" id="count"></span></div>
+<div class="cat-bar-r"><div class="tabs" role="group" aria-label="Collection"></div><button type="button" class="btn-game" id="test"><span class="num">1</span>Better 1 or 2?<span class="num">2</span></button></div>
 </div>
-<div class="wrap cat-bar"><div class="tabs" role="group" aria-label="Collection"></div><div class="cat-bar-r"><span class="mono sub" id="count"></span><button type="button" class="btn-game" id="test"><span class="num">1</span>Better 1 or 2?<span class="num">2</span></button></div></div>
-<div class="wrap"><div class="stage">
-<div class="stage-img"><img id="hero-img" alt=""></div>
-<div class="views" role="group" id="views"></div>
-<span class="badge mono" id="counter"></span>
-<div class="giant" id="giant" aria-hidden="true"></div>
-</div></div>
-<div class="wrap info">
-<div><h2 class="h-name" id="name"></h2><span class="mono sub" id="meta"></span></div>
-<div><span class="mono sub" id="colour"></span><div class="swatches" role="group" id="swatches"></div></div>
+<div class="wrap"><div class="grid" id="grid"></div></div>
+<div class="detail" id="detail" hidden role="dialog" aria-modal="true" aria-labelledby="d-name">
+<div class="d-in">
+<div class="d-photo"><img id="d-img" alt=""><div class="views" role="group" id="views"></div><span class="badge mono" id="counter"></span></div>
+<div class="d-info">
+<span class="mono sub" id="d-coll"></span>
+<h2 class="h-name" id="d-name"></h2>
+<span class="mono sub" id="d-meta"></span>
+<span class="mono sub" id="colour"></span>
+<div class="swatches" role="group" id="swatches"></div>
 <div class="arrows"><button type="button" id="prev" aria-label="Previous"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11 2L4 9L11 16" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button><button type="button" id="next" class="solid" aria-label="Next"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7 2L14 9L7 16" stroke="currentColor" stroke-width="2.5" fill="none"/></svg></button></div>
 </div>
-<div class="strip-wrap"><div class="strip" id="strip"></div></div>
+</div>
+<button type="button" class="x" id="d-close" aria-label="Close"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button>
+</div>
 <div class="game" id="game" hidden><div class="game-in" role="dialog" aria-modal="true" aria-labelledby="game-title"><span class="mono dim" id="game-round"></span><h2 id="game-title"></h2><div class="game-body" id="game-body"></div></div><button type="button" class="x" id="game-close" aria-label="Close the test"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button></div>
 </main>
 <footer id="contatti" class="site-footer">

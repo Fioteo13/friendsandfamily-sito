@@ -9,6 +9,7 @@ Sito statico (HTML, CSS, JavaScript), senza build: basta pubblicare la cartella 
 | Home | `index.html` | `en/index.html` |
 | Catalogo | `catalogo.html` | `en/catalogue.html` |
 | Gallery | `gallery.html` | `en/gallery.html` |
+| Tecnica (occhiale 3D) | `tecnica.html` | `en/technique.html` |
 
 Il sito si adatta da solo a computer, tablet e telefono.
 
@@ -17,8 +18,9 @@ Il sito si adatta da solo a computer, tablet e telefono.
 ```
 assets/css/style.css     stile di tutto il sito
 assets/js/site.js        menu su mobile
-assets/js/catalog.js     catalogo: Vista/Sole, filtri, colori, scheda modello
+assets/js/catalog.js     catalogo: tutti i modelli, filtri Friends/Family e Vista/Sole, scheda modello
 assets/js/gallery.js     gallery a schermo intero
+assets/js/tecnica.js     occhiale 3D interattivo (pin, cerniera, asta termoformata, misure)
 assets/img/frames/       foto occhiali  (modello-colore-lato/front.jpg)
 assets/img/gallery/      foto della campagna
 ```

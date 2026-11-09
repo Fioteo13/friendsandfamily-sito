@@ -23,19 +23,9 @@
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Apri il menu"><span></span><span></span></button></div>
 </header>
 <main id="main" class="catalog" data-lang="it">
-<section class="worlds" aria-label="Scegli il mondo">
-<button type="button" class="world w-vista" data-mode="vista" aria-pressed="true">
-<span class="w-meta mono"><span>01</span><span class="w-count" data-count="vista"></span></span>
-<span class="w-name">Vista</span><span class="w-sub mono">Occhiali da vista</span>
-</button>
-<button type="button" class="world w-sole" data-mode="sole" aria-pressed="false">
-<span class="w-meta mono"><span>02</span><span class="w-count" data-count="sole"></span></span>
-<span class="w-name">Sole</span><span class="w-sub mono">Occhiali da sole</span>
-</button>
-</section>
 <div class="cat-bar wrap" id="cat-bar">
 <div class="cat-bar-l"><h1 class="h-cat">Catalogo <span id="mode-label"></span></h1><span class="mono sub" id="count"></span></div>
-<div class="cat-bar-r"><div class="tabs" role="group" aria-label="Collezione"></div></div>
+<div class="cat-bar-r"><div class="tabs tabs-coll" role="group" aria-label="Collezione"></div><div class="tabs tabs-mode" role="group" aria-label="Vista o sole"></div></div>
 </div>
 <div class="wrap"><div class="grid" id="grid"></div></div>
 <div class="detail" id="detail" hidden role="dialog" aria-modal="true" aria-labelledby="d-name">

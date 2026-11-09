@@ -1,4 +1,4 @@
-// Catalogue: choose a world (Optical / Sun), filter by collection, editorial grid, detail sheet
+// Catalogue: all frames at once, filters for collection (Friends/Family) and type (Optical/Sun), detail sheet
 (function () {
   var root = document.querySelector('.catalog');
   if (!root || !window.FF_MODELS) return;
@@ -7,21 +7,22 @@
 
   var T = LANG === 'it'
     ? { all: 'Tutti', friends: 'Friends', family: 'Family', vista: 'Vista', sole: 'Sole', side: 'Lato', front: 'Fronte', col: 'Col.', colours: 'colori', view: 'Vista foto', grey: 'lenti grigie', blue: 'lenti azzurre', eyewear: 'Occhiale', open: 'Apri', models: 'modelli', collection: 'Collection',
-        game: 'Meglio 1… o 2?', round: 'Lente', of: 'di', yours: 'La tua montatura', openCard: 'Vedi la montatura', again: 'Rifai il test',
+        allTypes: 'Vista + Sole', collLabel: 'Collezione', typeLabel: 'Tipo',
         names: { 1: 'Nero', 2: 'Havana scuro', 3: 'Grigio cristallo', 4: 'Blu cristallo', 5: 'Verde cristallo', 6: 'Cristallo', 7: 'Havana', 8: 'Bordeaux', 9: 'Miele cristallo', 10: 'Rosa cristallo', 11: 'Rosso vino' } }
     : { all: 'All', friends: 'Friends', family: 'Family', vista: 'Optical', sole: 'Sun', side: 'Side', front: 'Front', col: 'Col.', colours: 'colours', view: 'Photo view', grey: 'grey lenses', blue: 'light blue lenses', eyewear: 'Eyewear', open: 'Open', models: 'frames', collection: 'Collection',
-        game: 'Better 1… or 2?', round: 'Lens', of: 'of', yours: 'Your frame', openCard: 'See the frame', again: 'Take it again',
+        allTypes: 'Optical + Sun', collLabel: 'Collection', typeLabel: 'Type',
         names: { 1: 'Black', 2: 'Dark tortoise', 3: 'Crystal grey', 4: 'Crystal blue', 5: 'Crystal green', 6: 'Crystal clear', 7: 'Tortoise', 8: 'Burgundy', 9: 'Crystal honey', 10: 'Crystal pink', 11: 'Wine red' } };
   var HEX = { 1: '#111111', 2: '#3A2717', 3: '#A3A8AC', 4: '#5F7F9E', 5: '#5E7A66', 6: '#E4EAEE', 7: '#8E4F20', 8: '#6A1B31', 9: '#C08A52', 10: '#F2C4CC', 11: '#7A1F24' };
   var LENS = { grey: '#3B3D42', blue: '#8FB8E0' };
 
   var ALL = window.FF_MODELS;
-  var st = { mode: 'vista', coll: 'all', open: null, sel: {}, view: {} };
+  var st = { mode: 'all', coll: 'all', open: null, sel: {}, view: {} };
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var pad = function (n) { return String(n).padStart(2, '0'); };
 
   function inMode(mode) {
+    if (mode === 'all') return ALL.slice();
     var dark = mode === 'sole';
     return ALL.map(function (m) {
       return Object.assign({}, m, { colors: m.colors.filter(function (c) { return dark ? !!c.lens : !c.lens; }) });
@@ -36,14 +37,16 @@
   // ---------- grid ----------
   function renderGrid() {
     root.classList.toggle('dark', st.mode === 'sole');
-    root.querySelectorAll('.world').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-mode') === st.mode ? 'true' : 'false'); });
-    root.querySelectorAll('[data-count]').forEach(function (el) { el.textContent = pad(inMode(el.getAttribute('data-count')).length) + ' ' + T.models; });
-    $('mode-label').textContent = '· ' + T[st.mode];
+    $('mode-label').textContent = st.mode === 'all' ? '' : '· ' + T[st.mode];
     var L = list();
     $('count').textContent = pad(L.items.length) + ' ' + T.models;
-    root.querySelector('.tabs').innerHTML = ['all', 'friends', 'family'].map(function (k) {
+    root.querySelector('.tabs-coll').innerHTML = ['all', 'friends', 'family'].map(function (k) {
       var cnt = k === 'all' ? L.src.length : L.src.filter(function (x) { return x.coll === k; }).length;
       return '<button type="button" data-coll="' + k + '" aria-pressed="' + (st.coll === k) + '">' + T[k] + ' <i>' + pad(cnt) + '</i></button>';
+    }).join('');
+    root.querySelector('.tabs-mode').innerHTML = ['all', 'vista', 'sole'].map(function (k) {
+      var cnt = inMode(k).filter(function (x) { return st.coll === 'all' || x.coll === st.coll; }).length;
+      return '<button type="button" data-mode="' + k + '" aria-pressed="' + (st.mode === k) + '">' + (k === 'all' ? T.allTypes : T[k]) + ' <i>' + pad(cnt) + '</i></button>';
     }).join('');
     $('grid').innerHTML = L.items.map(function (m, i) {
       var c = m.colors[colourOf(m)];
@@ -68,7 +71,7 @@
     var di = $('d-img'); di.src = IMG + img; di.alt = T.eyewear + ' ' + m.name + ', ' + cname;
     if (animate) { di.classList.remove('in'); void di.offsetWidth; di.classList.add('in'); }
     $('counter').textContent = 'N° ' + pad(i + 1) + ' / ' + pad(n);
-    $('d-coll').textContent = T.collection + ' ' + T[m.coll] + ' · ' + T[st.mode];
+    $('d-coll').textContent = T.collection + ' ' + T[m.coll] + ' · ' + T[c.lens ? 'sole' : 'vista'];
     $('d-name').textContent = m.name;
     $('d-meta').textContent = m.size;
     $('colour').textContent = T.col + ' ' + c.code + ' — ' + cname;
@@ -97,9 +100,7 @@
   root.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b || !root.contains(b)) return;
     if (b.hasAttribute('data-mode')) {
-      if (st.mode !== b.getAttribute('data-mode')) { st.mode = b.getAttribute('data-mode'); renderGrid(); }
-      $('cat-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
+      st.mode = b.getAttribute('data-mode'); renderGrid(); return;
     }
     if (b.hasAttribute('data-coll')) { st.coll = b.getAttribute('data-coll'); renderGrid(); return; }
     if (b.hasAttribute('data-open')) { openDetail(b.getAttribute('data-open')); return; }
@@ -123,5 +124,4 @@
   if (q.get('c') === 'friends' || q.get('c') === 'family') st.coll = q.get('c');
   if (q.get('m') === 'sole' || q.get('m') === 'vista') st.mode = q.get('m');
   renderGrid();
-  if (q.get('c') || q.get('m')) setTimeout(function () { $('cat-bar').scrollIntoView({ block: 'start' }); }, 60);
 })();
